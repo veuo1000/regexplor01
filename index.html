@@ -5,8 +5,8 @@
   </script>
 </head>
 <body>
-   <video id="video1"><source id="source1" src="" type=""></video>
    <cast-media-player id="player"></cast-media-player>
+   <video id="video1"><source id="source1" src="" type=""></video>
    <script>
     
     const context = cast.framework.CastReceiverContext.getInstance();
@@ -78,14 +78,14 @@
       cast.framework.events.EventType.PLAYER_LOAD_COMPLETE, (event) => {
 
         // show the cast-media-player 
-        // hideVideoShowCMP();
+        hideVideoShowCMP();
     });
 
         playerManager.addEventListener(
       cast.framework.events.EventType.PLAYING, (event) => {
 
         // show the cast-media-player 
-        // hideVideoShowCMP();
+        hideVideoShowCMP();
     });
 
 
@@ -100,6 +100,9 @@
 
     playerManager.addEventListener(
       cast.framework.events.EventType.ERROR, (event) => {
+
+        // stop the default player 
+        playerManager.stop();
 
         changeSource(urlHolder);
 
