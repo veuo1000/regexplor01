@@ -1,0 +1,102 @@
+<html>
+<head>
+  <script type="text/javascript"
+      src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js">
+  </script>
+</head>
+<body>
+   <video id="video1"><source id="source1" src="" type=""></video>
+   <cast-media-player id="player"></cast-media-player>
+   <script>
+    
+    
+    const context = cast.framework.CastReceiverContext.getInstance();
+    const playerManager = context.getPlayerManager();
+
+
+    // disable the idel time out ????
+    // maybe move to the error handler to prevent idle TV?
+    cast.framework.CastReceiverOptions.disableIdleTimeout = true
+
+
+    var urlHolder = "";
+
+
+    function changeSource(url) {
+      var source1 = document.getElementById('source1');
+      source1.setAttribute('src', url);
+
+      source1.setAttribute('type', 'video/mp4');
+
+      if (url.includes('.m3u8')) {
+        source1.setAttribute('type', 'application/x-mpegurl');
+      }
+
+    }
+
+    function videoFullScreenPlay() {
+      var video = document.getElementById('video1');
+      
+      video.style.width  = "100%";
+
+      video.load();
+      video.play();
+    }
+
+    function hideVideo() {
+      var video = document.getElementById('video1');
+      video.style.display = "none";
+    }
+    function showVideo() {
+      var video = document.getElementById('video1');
+      video.style.display = "block";
+    }
+
+
+    function hideCMP() {
+      var player = document.getElementById('player');
+      player.style.display = "none";
+    }
+    function showCMP() {
+      var player = document.getElementById('player');
+      player.style.display = "block";
+    }
+
+
+
+    playerManager.addEventListener(
+      cast.framework.events.EventType.LOAD_START, (event) => {
+
+        hideVideo();
+
+        showCMP();
+    });
+
+
+    playerManager.addEventListener(
+      cast.framework.events.EventType.MEDIA_STATUS, (event) => {
+
+        // URL for the video 
+        urlHolder = event.mediaStatus.media.contentUrl;
+
+    });
+
+
+    playerManager.addEventListener(
+      cast.framework.events.EventType.ERROR, (event) => {
+
+        hideCMP();
+
+        showVideo();
+
+        changeSource(urlHolder);
+
+        videoFullScreenPlay();
+
+    });
+
+    context.start();
+
+  </script>
+</body>
+</html>
