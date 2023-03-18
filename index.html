@@ -45,21 +45,34 @@
 
     function hideVideo() {
       var video = document.getElementById('video1');
-      video.style.display = "none";
+
+      video.style.zIndex = '0';
     }
     function showVideo() {
       var video = document.getElementById('video1');
-      video.style.display = "block";
+
+      video.style.zIndex = '1'
     }
-
-
     function hideCMP() {
       var player = document.getElementById('player');
-      player.style.display = "none";
+
+      player.style.zIndex = '0';
     }
     function showCMP() {
       var player = document.getElementById('player');
-      player.style.display = "block";
+
+      player.style.zIndex = '1';
+    }
+
+
+    function showVideoHideCMP() {
+      showVideo();
+      hideCMP();
+    }
+
+    function hideVideoShowCMP() {
+      hideVideo();
+      showCMP();
     }
 
 
@@ -67,9 +80,7 @@
     playerManager.addEventListener(
       cast.framework.events.EventType.LOAD_START, (event) => {
 
-        // hideVideo();
-
-        // showCMP();
+        hideVideoShowCMP();
     });
 
 
@@ -85,9 +96,7 @@
     playerManager.addEventListener(
       cast.framework.events.EventType.ERROR, (event) => {
 
-        hideCMP();
-
-        showVideo();
+        showVideoHideCMP();
 
         changeSource(urlHolder);
 
