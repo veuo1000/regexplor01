@@ -6,7 +6,7 @@
 </head>
 <body>
    <cast-media-player id="player"></cast-media-player>
-   <video id="video1"><source id="source1" src="" type=""></video>
+   <video controls id="video1"><source id="source1" src="" type=""></video>
    <script>
     
     const context = cast.framework.CastReceiverContext.getInstance();
@@ -47,16 +47,8 @@
       player.style.display = "none";
     }
 
-    function hideVideoShowCMP() {
-      var video = document.getElementById('video1');
-      var player = document.getElementById('player');
-      video.style.display = "none";
-      player.style.display = "block";
-    }
-
     function addListenerToVideo() {
       var video = document.getElementById('video1');
-      var player = document.getElementById('player');
       
       video.onloadstart = function() {
         showVideoHideCMP();
