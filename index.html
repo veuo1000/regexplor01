@@ -43,15 +43,15 @@
     function showVideoHideCMP() {
       var video = document.getElementById('video1');
       var player = document.getElementById('player');
-      video.style.zIndex = '1'
-      player.style.zIndex = '-1';
+      video.style.display = "block";
+      player.style.display = "none";
     }
 
     function hideVideoShowCMP() {
       var video = document.getElementById('video1');
       var player = document.getElementById('player');
-      video.style.zIndex = '-1'
-      player.style.zIndex = '1';
+      video.style.display = "none";
+      player.style.display = "block";
     }
 
     function addListenerToVideo() {
