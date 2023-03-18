@@ -67,7 +67,7 @@
     playerManager.addEventListener(
       cast.framework.events.EventType.LOAD_START, (event) => {
 
-        hideVideo();
+        // hideVideo();
 
         // showCMP();
     });
@@ -85,7 +85,7 @@
     playerManager.addEventListener(
       cast.framework.events.EventType.ERROR, (event) => {
 
-        // hideCMP();
+        hideCMP();
 
         showVideo();
 
