@@ -9,10 +9,8 @@
    <cast-media-player id="player"></cast-media-player>
    <script>
     
-    
     const context = cast.framework.CastReceiverContext.getInstance();
     const playerManager = context.getPlayerManager();
-
 
     // disable the idel time out ????
     // maybe move to the error handler to prevent idle TV?
@@ -20,7 +18,6 @@
 
 
     var urlHolder = "";
-
 
     function changeSource(url) {
       var source1 = document.getElementById('source1');
@@ -43,43 +40,50 @@
       video.play();
     }
 
-    function hideVideo() {
-      var video = document.getElementById('video1');
-
-      video.style.zIndex = '0';
-    }
-    function showVideo() {
-      var video = document.getElementById('video1');
-
-      video.style.zIndex = '1'
-    }
-    function hideCMP() {
-      var player = document.getElementById('player');
-
-      player.style.zIndex = '0';
-    }
-    function showCMP() {
-      var player = document.getElementById('player');
-
-      player.style.zIndex = '1';
-    }
-
-
     function showVideoHideCMP() {
-      showVideo();
-      hideCMP();
+      var video = document.getElementById('video1');
+      var player = document.getElementById('player');
+      video.style.zIndex = '1'
+      player.style.zIndex = '0';
     }
 
     function hideVideoShowCMP() {
-      hideVideo();
-      showCMP();
+      var video = document.getElementById('video1');
+      var player = document.getElementById('player');
+      video.style.zIndex = '0'
+      player.style.zIndex = '1';
     }
 
+    function addListenerToVideo() {
+      var video = document.getElementById('video1');
+      var player = document.getElementById('player');
+      
+      video.onloadstart = function() {
+        showVideoHideCMP();
+      };
 
+      video.onplay = function() {
+        showVideoHideCMP();
+      };
+    }
 
     playerManager.addEventListener(
       cast.framework.events.EventType.LOAD_START, (event) => {
 
+        // ??? 
+    });
+
+    playerManager.addEventListener(
+      cast.framework.events.EventType.PLAYER_LOAD_COMPLETE, (event) => {
+
+        // show the cast-media-player 
+        hideVideoShowCMP();
+    });
+
+        playerManager.addEventListener(
+      cast.framework.events.EventType.PLAYING, (event) => {
+
+        // show the cast-media-player 
         hideVideoShowCMP();
     });
 
@@ -95,8 +99,6 @@
 
     playerManager.addEventListener(
       cast.framework.events.EventType.ERROR, (event) => {
-
-        showVideoHideCMP();
 
         changeSource(urlHolder);
 
