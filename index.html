@@ -6,7 +6,7 @@
 </head>
 <body>
    <cast-media-player id="player"></cast-media-player>
-   <video controls id="video1"><source id="source1" src="" type=""></video>
+   <div id="box"></div>
    <script>
     
     const context = cast.framework.CastReceiverContext.getInstance();
@@ -16,77 +16,51 @@
     // maybe move to the error handler to prevent idle TV?
     cast.framework.CastReceiverOptions.disableIdleTimeout = true
 
-
     var urlHolder = "";
 
-    function changeSource(url) {
-      var source1 = document.getElementById('source1');
-      source1.setAttribute('src', url);
+    function addVideoElement(aVideoURL) {
 
-      source1.setAttribute('type', 'video/mp4');
+      var video = document.createElement('video');
+      video.controls = true;
+      video.style.width = "100%";
 
-      if (url.includes('.m3u8')) {
-        source1.setAttribute('type', 'application/x-mpegurl');
+      var source = document.createElement('source');
+      source.src = aVideoURL;
+      source.type = 'video/mp4';
+      if (aVideoURL.includes('.m3u8')) {
+        source.type = 'application/x-mpegurl';
       }
+      video.appendChild(source);
 
-    }
+      // hide the player 
+      var player = document.getElementById('player');
+      player.style.display = "none";
 
-    function videoFullScreenPlay() {
-      var video = document.getElementById('video1');
-      
-      video.style.width  = "100%";
+      // add the <video> 
+      var box = document.getElementById('box');
+      box.appendChild(video);
 
       video.load();
       video.play();
     }
 
-    function showVideoHideCMP() {
-      var video = document.getElementById('video1');
-      var player = document.getElementById('player');
-      video.style.display = "block";
-      player.style.display = "none";
-    }
-
-    function addListenerToVideo() {
-      var video = document.getElementById('video1');
-      
-      video.onloadstart = function() {
-        showVideoHideCMP();
-      };
-
-      video.onplay = function() {
-        showVideoHideCMP();
-      };
-    }
-
     playerManager.addEventListener(
       cast.framework.events.EventType.LOAD_START, (event) => {
-
-        addListenerToVideo();
-
     });
 
     playerManager.addEventListener(
       cast.framework.events.EventType.PLAYER_LOAD_COMPLETE, (event) => {
-
-
     });
 
     playerManager.addEventListener(
       cast.framework.events.EventType.PLAYING, (event) => {
-
-
     });
-
 
     playerManager.addEventListener(
       cast.framework.events.EventType.MEDIA_STATUS, (event) => {
-
         // URL for the video 
         urlHolder = event.mediaStatus.media.contentUrl;
-
     });
-
 
     playerManager.addEventListener(
       cast.framework.events.EventType.ERROR, (event) => {
@@ -94,10 +68,7 @@
         // stop the default player 
         playerManager.stop();
 
-        changeSource(urlHolder);
-
-        videoFullScreenPlay();
-
+        addVideoElement(urlHolder);
     });
 
     context.start();
